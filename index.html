@@ -1,1290 +1,1376 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<!doctype html>
+<html lang="fa" dir="rtl" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Site</title>
+    <title>همایون | متخصص تعمیرات تخصصی برد و پرینترهای صنعتی</title>
+    
     <link href="./src/output.css" rel="stylesheet" />
 
     <link href="./src/font/font.css" rel="stylesheet" />
     <link rel="stylesheet" href="./src/style.css" />
-    <style></style>
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Tailwind Config Customization -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                dark: "#0a0f1d",
+                card: "#12192c",
+                cyan: "#00f2fe",
+                blue: "#4facfe",
+                gold: "#ffb703",
+                amber: "#fb8500",
+              },
+            },
+            fontFamily: {
+              sans: ["Vazirmatn", "sans-serif"],
+            },
+            animation: {
+              "pulse-glow": "pulseGlow 3s infinite alternate",
+              float: "float 4s ease-in-out infinite",
+              "spin-slow": "spin 12s linear infinite",
+            },
+            keyframes: {
+              pulseGlow: {
+                "0%": { boxShadow: "0 0 15px rgba(0, 242, 254, 0.2)" },
+                "100%": { boxShadow: "0 0 35px rgba(0, 242, 254, 0.6)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "Vazirmatn", sans-serif;
+        background-color: #070a13;
+        color: #e2e8f0;
+        overflow-x: hidden;
+      }
+
+      /* Glassmorphism utility */
+      .glass-panel {
+        background: rgba(18, 25, 44, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-nav {
+        background: rgba(10, 15, 29, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      /* Gradient Borders */
+      .glow-border {
+        position: relative;
+      }
+      .glow-border::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        background: linear-gradient(45deg, #00f2fe, transparent, #ffb703);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+      }
+      .glow-border:hover::before {
+        opacity: 1;
+      }
+
+      /* Circuit Grid Background Effect */
+      .circuit-bg {
+        background-image:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(0, 242, 254, 0.05) 0%,
+            transparent 60%
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size:
+          100% 100%,
+          40px 40px,
+          40px 40px;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #070a13;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00f2fe;
+      }
+    </style>
   </head>
+  <body class="circuit-bg relative selection:bg-cyan-500 selection:text-black">
+    <!-- Canvas Background for Animated Circuits Node particles -->
+    <canvas
+      id="circuitCanvas"
+      class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"
+    ></canvas>
 
-  <body class="bg-gray-50">
-    <svg class="hidden">
-      <symbol id="home-icon" class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-        <path
-          d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
-        />
-      </symbol>
-      <symbol id="menu" xmlns="http://www.w3.org/2000/symbol" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      </symbol>
-    </svg>
-    <!-- ========== Header ========== -->
-    <header class="flex items-center bg-white shadow-md sticky top-0 z-50 h-20 mb-5">
-      <div class="container mx-auto px-4 py-3">
-        <div class="flex items-center justify-between md:justify-start gap-10">
+    <!-- Navigation Header -->
+    <header
+      class="fixed top-0 right-0 left-0 z-50 glass-nav transition-all duration-300"
+      id="navbar"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
           <!-- Logo -->
-          <div class="md:flex hidden items-center space-x-2 space-x-reverse">
-            <svg class="w-8 h-8 text-blue-600">
-              <use href="#home-icon"></use>
-            </svg>
-          </div>
-          <!-- دکمه همبرگر موبایل -->
-          <button id="menu-btn" class="block md:hidden text-gray-700 hover:text-blue-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <!-- منوی موبایل -->
-          <div class="flex md:hidden items-center space-x-2 space-x-reverse">
-            <svg class="w-8 h-8 text-blue-600">
-              <use href="#home-icon"></use>
-            </svg>
-            <span class="text-xl font-bold text-gray-800">سایت <span class="text-blue-600">عبدالکریم</span></span>
-          </div>
-          <!-- منوی دسکتاپ -->
-          <nav class="hidden md:flex md:justify-between md:items-center gap-5 md:w-full">
-            <div class="flex gap-5">
-              <div class="relative">
-                <!-- دکمه دسته‌بندی -->
-                <button id="categoryBtn" class="flex gap-1 text-black hover:text-blue-600 items-center">
-                  <svg class="w-5 h-5">
-                    <use href="#menu"></use>
-                  </svg>
-
-                  دسته بندی
-                </button>
-
-                <!-- مگا منو -->
-                <div id="megaMenu" class="hidden absolute top-full mt-8 w-auto bg-white shadow-lg rounded-lg z-50">
-                  <div class="flex">
-                    <!-- تب‌ها -->
-                    <div class="w-64 p-3 space-y-2 bg-white rounded-xl shadow-sm">
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab1"
-                      >
-                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          />
-                        </svg>
-                        <span>خیرین و نیک‌اندیشان شهر</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab2"
-                      >
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                          />
-                        </svg>
-                        <span>معرفی شهر</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab3"
-                      >
-                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                          />
-                        </svg>
-                        <span>اقوام و فرهنگ</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab4"
-                      >
-                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                          />
-                        </svg>
-                        <span>مدیریت شهر</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab5"
-                      >
-                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                          />
-                        </svg>
-                        <span>خدمات اداری و شهری</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab6"
-                      >
-                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
-                        <span>کسب‌وکارهای شهر</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab7"
-                      >
-                        <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                          <path
-                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                          />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                          />
-                        </svg>
-                        <span>آموزش و مهارت‌آموزی</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab8"
-                      >
-                        <svg class="w-5 h-5 text-lime-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="10" stroke-width="2" />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 2l2.5 4.5L19 8l-3 4.5 1 6-5-3-5 3 1-6L5 8l4.5-1.5L12 2z"
-                          />
-                        </svg>
-                        <span>ورزشی</span>
-                      </button>
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab9"
-                      >
-                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                          />
-                        </svg>
-                        <span>فرهنگی و هنری</span>
-                      </button>
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab10"
-                      >
-                        <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8-10a4 4 0 11-8 0 4 4 0 018 0zm8 5v2m-4-4h2a4 4 0 014 4v2"
-                          />
-                        </svg>
-                        <span>مفاخر و افتخارآفرینان شهر</span>
-                      </button>
-
-                      <button
-                        class="tab-btn w-full text-right px-3 py-2 rounded hover:bg-gray-100 transition flex items-center gap-3"
-                        data-tab="tab11"
-                      >
-                        <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                        <span>گالری شهر</span>
-                      </button>
-                    </div>
-                    <!-- محتوا -->
-                    <div class="w-52 p-4 text-gray-700">
-                      <div id="tab1">محتوای خیرین و نیک‌اندیشان شهر</div>
-                      <div id="tab2" class="hidden">محتوای معرفی شهر</div>
-                      <div id="tab3" class="hidden">محتوای اقوام و فرهنگ</div>
-                      <div id="tab4" class="hidden">محتوای مدیریت شهر</div>
-                      <div id="tab5" class="hidden">محتوای خدمات اداری و شهری</div>
-                      <div id="tab6" class="hidden">محتوای کسب‌وکارهای شهر</div>
-                      <div id="tab7" class="hidden">محتوای آموزش و مهارت‌آموزی</div>
-                      <div id="tab8" class="hidden">محتوای ورزشی</div>
-                      <div id="tab9" class="hidden">محتوای فرهنگی و هنری</div>
-                      <div id="tab10" class="hidden">محتوای مفاخر و افتخارآفرینان شهر</div>
-                      <div id="tab11" class="hidden">محتوای گالری شهر</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <a href="#" class="text-gray-700 hover:text-blue-600 transition"> علیرضا تجلی </a>
-              <a href="#" class="text-gray-700 hover:text-blue-600 transition"> درباره ما </a>
-              <a href="#" class="text-gray-700 hover:text-blue-600 transition"> تماس با ما </a>
+          <a href="#hero" class="flex items-center gap-3 group">
+            <div
+              class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-slate-900 font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform"
+            >
+              <i class="fa-solid fa-microchip"></i>
             </div>
             <div>
-              <!-- ===== باکس جستجو ===== -->
-              <div class="relative group">
-                <!-- آیکون جستجو -->
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </span>
-
-                <!-- اینپوت جستجو -->
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="جستجو..."
-                  class="w-full sm:w-64 lg:w-80 px-4 pr-11 py-2.5 bg-gray-100 hover:bg-white border-2 border-transparent hover:border-gray-300 focus:border-blue-500 focus:bg-white rounded-xl outline-none transition-all duration-300 text-sm placeholder:text-gray-400"
-                  oninput="handleSearch(this.value)"
-                />
-
-                <!-- دکمه پاک کردن (اختیاری) -->
-                <button
-                  id="clearBtn"
-                  onclick="document.getElementById('searchInput').value=''; handleSearch('');"
-                  class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-red-500 transition-colors hidden"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+              <span
+                class="text-xl font-extrabold tracking-tight text-white block"
+                >همایون</span
+              >
+              <span class="text-xs text-cyan-400 font-medium block"
+                >تکنولوژی و تعمیرات صنعتی</span
+              >
             </div>
+          </a>
+
+          <!-- Desktop Nav -->
+          <nav
+            class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300"
+          >
+            <a href="#about" class="hover:text-cyan-400 transition-colors py-2"
+              >درباره من</a
+            >
+            <a
+              href="#services"
+              class="hover:text-cyan-400 transition-colors py-2"
+              >خدمات تخصصی</a
+            >
+            <a
+              href="#portfolio"
+              class="hover:text-cyan-400 transition-colors py-2"
+              >نمونه‌کارها</a
+            >
+            <a href="#why-me" class="hover:text-cyan-400 transition-colors py-2"
+              >مزایای همکاری</a
+            >
+            <a
+              href="#contact"
+              class="hover:text-cyan-400 transition-colors py-2"
+              >ارتباط با من</a
+            >
           </nav>
-          <!-- دکمه تراز موبایل -->
-          <!-- <button id="menu-btn" class="block md:hidden text-gray-700 hover:text-blue-600"></button> -->
-          <!-- ===== دکمه جستجو برای هدر موبایل ===== -->
-          <button onclick="openSearch()" class="block md:hidden p-2 rounded-lg hover:bg-blue-50 transition-all duration-300 group relative" aria-label="جستجو">
-            <!-- آیکون جستجو -->
-            <svg class="w-7 h-7 text-gray-600 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-          
-          <!-- ====== منوی موبایل دوستونه ====== -->
-          <div id="mobile-menu" class="fixed inset-0 bg-white z-999 hidden flex-col">
-            <!-- هدر موبایل با دکمه بستن -->
-            <div class="sticky top-0 bg-white z-10 p-4 border-b border-gray-200 flex items-center justify-between">
-              <span class="font-bold text-lg text-gray-800">دسته‌بندی</span>
-              <button id="close-mobile-menu" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
-            </div>
 
-            <!-- ====== بخش دوستونه ====== -->
-            <div class="flex-1 flex overflow-hidden">
-              <!-- ====== ستون راست: تب‌ها (با اسکرول) ====== -->
-              <div class="w-auto bg-gray-50 overflow-y-auto p-3 space-y-2 border-l border-gray-200">
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab1"
-                >
-                  <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                  <span class="text-xs">خیرین و نیک‌اندیشان</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab2"
-                >
-                  <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                  <span class="text-xs">معرفی شهر</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab3"
-                >
-                  <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <span class="text-xs">اقوام و فرهنگ</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab4"
-                >
-                  <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                  <span class="text-xs">مدیریت شهر</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab5"
-                >
-                  <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                    />
-                  </svg>
-                  <span class="text-xs">خدمات اداری و شهری</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab6"
-                >
-                  <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span class="text-xs">کسب‌وکارهای شهر</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab7"
-                >
-                  <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path
-                      d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                    />
-                  </svg>
-                  <span class="text-xs">آموزش و مهارت‌آموزی</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab8"
-                >
-                  <svg class="w-5 h-5 text-lime-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke-width="2" />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 2l2.5 4.5L19 8l-3 4.5 1 6-5-3-5 3 1-6L5 8l4.5-1.5L12 2z"
-                    />
-                  </svg>
-                  <span class="text-xs">ورزشی</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab9"
-                >
-                  <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                    />
-                  </svg>
-                  <span class="text-xs">فرهنگی و هنری</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab10"
-                >
-                  <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8-10a4 4 0 11-8 0 4 4 0 018 0zm8 5v2m-4-4h2a4 4 0 014 4v2"
-                    />
-                  </svg>
-                  <span class="text-xs">مفاخر و افتخارآفرینان</span>
-                </button>
-
-                <button
-                  class="tab-btn-mobile w-full text-right px-3 py-2.5 rounded-lg hover:bg-gray-200 transition flex items-center gap-3 text-sm"
-                  data-tab="tab11"
-                >
-                  <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span class="text-xs">گالری شهر</span>
-                </button>
-              </div>
-
-              <!-- ====== ستون چپ: محتوای تب‌ها (با اسکرول) ====== -->
-              <div class="w-1/2 bg-white overflow-y-auto p-4">
-                <!-- محتوای تب ۱ -->
-                <div id="tab1-content" class="tab-content">
-                  <h3 class="font-bold text-gray-800 mb-3">خیرین و نیک‌اندیشان شهر</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">✅ لیست خیرین مدرسه‌ساز</li>
-                    <li class="border-b pb-2">✅ معرفی نیک‌اندیشان برتر</li>
-                    <li class="border-b pb-2">✅ پروژه‌های خیریه در حال اجرا</li>
-                    <li class="border-b pb-2">✅ گزارش فعالیت‌های خیرین</li>
-                    <li class="border-b pb-2">✅ نحوه مشارکت در کارهای خیر</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۲ -->
-                <div id="tab2-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">معرفی شهر</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">🏛️ تاریخچه شهر</li>
-                    <li class="border-b pb-2">🗺️ نقشه و مناطق شهری</li>
-                    <li class="border-b pb-2">🏞️ جاذبه‌های گردشگری</li>
-                    <li class="border-b pb-2">🌆 تصاویر هوایی</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۳ -->
-                <div id="tab3-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">اقوام و فرهنگ</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">👥 اقوام ساکن در شهر</li>
-                    <li class="border-b pb-2">🎭 آیین‌ها و سنت‌ها</li>
-                    <li class="border-b pb-2">🧆 غذاهای محلی</li>
-                    <li class="border-b pb-2">🎵 موسیقی محلی</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۴ -->
-                <div id="tab4-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">مدیریت شهر</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">🏢 شهرداری و سازمان‌ها</li>
-                    <li class="border-b pb-2">📋 قوانین و مقررات شهری</li>
-                    <li class="border-b pb-2">🗳️ انتخابات و شوراها</li>
-                    <li class="border-b pb-2">📊 بودجه و برنامه‌ها</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۵ -->
-                <div id="tab5-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">خدمات اداری و شهری</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">📋 دفاتر پیشخوان دولت</li>
-                    <li class="border-b pb-2">🏥 مراکز بهداشتی و درمانی</li>
-                    <li class="border-b pb-2">🚌 حمل و نقل عمومی</li>
-                    <li class="border-b pb-2">🗑️ مدیریت پسماند</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۶ -->
-                <div id="tab6-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">کسب‌وکارهای شهر</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">🛍️ بازارها و مراکز خرید</li>
-                    <li class="border-b pb-2">🏭 صنایع و کارخانجات</li>
-                    <li class="border-b pb-2">💼 مشاغل برتر</li>
-                    <li class="border-b pb-2">📈 فرصت‌های سرمایه‌گذاری</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۷ -->
-                <div id="tab7-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">آموزش و مهارت‌آموزی</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">🏫 مدارس و دانشگاه‌ها</li>
-                    <li class="border-b pb-2">💻 دوره‌های آموزشی</li>
-                    <li class="border-b pb-2">📚 کتابخانه‌ها</li>
-                    <li class="border-b pb-2">🧪 مراکز علمی و پژوهشی</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۸ -->
-                <div id="tab8-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">ورزشی</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">⚽ باشگاه‌های ورزشی</li>
-                    <li class="border-b pb-2">🏟️ ورزشگاه‌ها و سالن‌ها</li>
-                    <li class="border-b pb-2">🏆 مسابقات و رویدادها</li>
-                    <li class="border-b pb-2">🧘 تیم‌های ورزشی</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۹ -->
-                <div id="tab9-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">فرهنگی و هنری</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">🎨 گالری‌ها و نمایشگاه‌ها</li>
-                    <li class="border-b pb-2">🎭 تئاتر و سینما</li>
-                    <li class="border-b pb-2">🎵 کنسرت‌ها و جشنواره‌ها</li>
-                    <li class="border-b pb-2">📖 کتابخانه‌ها و نشر</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۱۰ -->
-                <div id="tab10-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">مفاخر و افتخارآفرینان</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">⭐ مشاهیر علمی</li>
-                    <li class="border-b pb-2">⭐ مشاهیر هنری</li>
-                    <li class="border-b pb-2">⭐ مشاهیر ورزشی</li>
-                    <li class="border-b pb-2">⭐ مفاخر مذهبی</li>
-                  </ul>
-                </div>
-
-                <!-- محتوای تب ۱۱ -->
-                <div id="tab11-content" class="tab-content hidden">
-                  <h3 class="font-bold text-gray-800 mb-3">گالری شهر</h3>
-                  <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="border-b pb-2">📸 تصاویر تاریخی</li>
-                    <li class="border-b pb-2">📸 تصاویر جدید</li>
-                    <li class="border-b pb-2">📸 رویدادهای شهری</li>
-                    <li class="border-b pb-2">📸 طبیعت و مناظر</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <!-- Action Button -->
+          <div class="hidden md:flex items-center gap-4">
+            <a
+              href="tel:09120000000"
+              class="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm text-slate-900 bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:-translate-y-0.5"
+            >
+              <i class="fa-solid fa-phone-flip text-xs"></i>
+              <span>مشاوره سریع</span>
+            </a>
           </div>
+
+          <!-- Mobile menu button -->
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            class="md:hidden text-slate-300 hover:text-white p-2 text-2xl focus:outline-none"
+          >
+            <i class="fa-solid fa-bars" id="menu-icon"></i>
+          </button>
         </div>
+      </div>
+
+      <!-- Mobile Menu Dropdown -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden glass-panel border-t border-slate-800 px-4 pt-3 pb-6 space-y-3 text-right"
+      >
+        <a
+          href="#about"
+          class="block py-2 text-slate-200 hover:text-cyan-400 font-medium"
+          >درباره من</a
+        >
+        <a
+          href="#services"
+          class="block py-2 text-slate-200 hover:text-cyan-400 font-medium"
+          >خدمات تخصصی</a
+        >
+        <a
+          href="#portfolio"
+          class="block py-2 text-slate-200 hover:text-cyan-400 font-medium"
+          >نمونه‌کارها</a
+        >
+        <a
+          href="#why-me"
+          class="block py-2 text-slate-200 hover:text-cyan-400 font-medium"
+          >مزایای همکاری</a
+        >
+        <a
+          href="#contact"
+          class="block py-2 text-slate-200 hover:text-cyan-400 font-medium"
+          >ارتباط با من</a
+        >
+        <a
+          href="tel:09120000000"
+          class="w-full text-center mt-4 inline-block py-3 rounded-xl font-bold text-slate-900 bg-cyan-400"
+        >
+          <i class="fa-solid fa-phone-flip ml-2"></i> تماس مستقیم
+        </a>
       </div>
     </header>
 
-    <section class="container mx-auto px-4 py-8">
-      <div class="relative h-96 overflow-hidden rounded-2xl shadow-xl bg-gradient-to-r from-blue-600 to-purple-600">
-        <div id="slides" class="flex transition-transform duration-500 ease-in-out">
-          <div class="min-w-full p-8 md:p-16 text-white">
-            <div class="max-w-2xl">
-              <span class="inline-block bg-yellow-400 text-gray-800 text-xs font-bold px-3 py-1 rounded-full mb-4"> ویژه </span>
-              <h2 class="text-2xl md:text-4xl font-bold mb-4">معرفی بهترین قالب‌های ایرانی وردپرس</h2>
-              <p class="text-sm md:text-base text-blue-100 mb-6">
-                در این مقاله با بهترین قالب‌های ایرانی وردپرس آشنا میشید و میتونید بهترین انتخاب رو داشته باشید.
-              </p>
-              <button class="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition">ادامه مطلب</button>
+    <!-- Hero Section -->
+    <section
+      id="hero"
+      class="relative min-h-screen pt-32 pb-20 flex items-center justify-center z-10"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <!-- Hero Content -->
+          <div class="lg:col-span-7 text-right space-y-8">
+            <!-- Status Badge -->
+            <div
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-cyan-400 text-xs sm:text-sm font-semibold"
+            >
+              <span
+                class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"
+              ></span>
+              <span>مرکز تخصصی تعمیرات الکترونیک و پلاترهای بزرگ صنعتی</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1
+              class="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight"
+            >
+              احیای دقیق
+              <span
+                class="bg-gradient-to-r from-cyan-400 via-blue-400 to-amber-400 bg-clip-text text-transparent"
+                >بردهای صنعتی</span
+              >
+              و پرینترهای غول‌پیکر
+            </h1>
+
+            <!-- Description -->
+            <p
+              class="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl font-light"
+            >
+              با بیش از ۱۰ سال تجربه تخصصی در عیب‌یابی میکروسکوپی، تعمیر بردهای
+              الکترونیکی پیچیده (Mainboard & Power) و اورهال کامل دستگاه‌ها و
+              پلاترهای صنعتی بالای ۱ متر.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <a
+                href="#portfolio"
+                class="px-8 py-4 rounded-xl font-bold text-slate-900 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 transition-all shadow-lg shadow-cyan-500/30 hover:scale-105"
+              >
+                مشاهده نمونه‌کارها
+                <i class="fa-solid fa-arrow-left mr-2"></i>
+              </a>
+              <a
+                href="#contact"
+                class="px-8 py-4 rounded-xl font-bold text-slate-200 glass-panel hover:bg-slate-800 hover:text-white transition-all border border-slate-700 hover:border-cyan-500/50"
+              >
+                درخواست مشاوره فنی
+              </a>
+            </div>
+
+            <!-- Highlight Metrics -->
+            <div
+              class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800/80"
+            >
+              <div class="text-right">
+                <div class="text-2xl sm:text-3xl font-black text-cyan-400">
+                  +۱۰
+                </div>
+                <div class="text-xs sm:text-sm text-slate-400">
+                  سال سابقه تخصصی
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-2xl sm:text-3xl font-black text-amber-400">
+                  +۶۰۰
+                </div>
+                <div class="text-xs sm:text-sm text-slate-400">
+                  برد و دستگاه احیا شده
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-2xl sm:text-3xl font-black text-emerald-400">
+                  ۱۰۰٪
+                </div>
+                <div class="text-xs sm:text-sm text-slate-400">
+                  تضمین تست عملکرد
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="min-w-full p-8 md:p-16 text-white">
-            <div class="max-w-2xl">
-              <span class="inline-block bg-green-400 text-gray-800 text-xs font-bold px-3 py-1 rounded-full mb-4"> آموزشی </span>
-              <h2 class="text-2xl md:text-4xl font-bold mb-4">آموزش ریسپانسیو کردن سایت با Tailwind</h2>
-              <p class="text-sm md:text-base text-blue-100 mb-6">
-                یاد بگیرید چطور با استفاده از کلاس‌های کاربردی Tailwind، سایت خودتون رو برای همه دستگاه‌ها بهینه کنید.
-              </p>
-              <button class="bg-white text-green-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition">مشاهده آموزش</button>
+          <!-- Hero Visual / Graphic Card -->
+          <div class="lg:col-span-5 relative">
+            <div class="relative mx-auto max-w-md lg:max-w-none">
+              <!-- Glowing backdrop circle -->
+              <div
+                class="absolute -top-10 -left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"
+              ></div>
+              <div
+                class="absolute -bottom-10 -right-10 w-72 h-72 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"
+              ></div>
+
+              <!-- Card Display -->
+              <div
+                class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-700/60 shadow-2xl relative overflow-hidden group"
+              >
+                <!-- Circuit Decorative overlay -->
+                <div
+                  class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-amber-400 to-blue-500"
+                ></div>
+
+                <!-- Header Info -->
+                <div
+                  class="flex items-center justify-between pb-6 border-b border-slate-800"
+                >
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400"
+                    >
+                      <i class="fa-solid fa-print text-2xl"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-bold text-white text-base">
+                        پلاتر و پرینتر صنعتی
+                      </h3>
+                      <span class="text-xs text-slate-400"
+                        >Wide-Format Industrial Plotter</span
+                      >
+                    </div>
+                  </div>
+                  <span
+                    class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                    >آماده به‌کار</span
+                  >
+                </div>
+
+                <!-- Interactive Board Animation Visual -->
+                <div
+                  class="my-6 py-8 px-4 rounded-2xl bg-slate-950/80 border border-slate-800/80 relative flex flex-col items-center justify-center gap-4 text-center"
+                >
+                  <div class="relative">
+                    <div
+                      class="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 text-4xl shadow-lg shadow-cyan-500/20 animate-pulse-glow"
+                    >
+                      <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <!-- Orbiting pins -->
+                    <span
+                      class="absolute -top-2 -right-2 w-4 h-4 bg-amber-400 rounded-full animate-ping"
+                    ></span>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-200">
+                      عیب‌یابی سیگنالی و فرکانسی
+                    </h4>
+                    <p class="text-xs text-slate-400 mt-1">
+                      تست خطوط ولتاژ و تعویض چیپست‌های SMD/BGA
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Features List in Hero Card -->
+                <div class="space-y-3 text-xs sm:text-sm text-slate-300">
+                  <div
+                    class="flex items-center justify-between py-1.5 border-b border-slate-800/50"
+                  >
+                    <span class="text-slate-400">پشتیبانی از برندها:</span>
+                    <span class="font-semibold text-cyan-300"
+                      >Roland, Mimaki, Mutoh, HP</span
+                    >
+                  </div>
+                  <div
+                    class="flex items-center justify-between py-1.5 border-b border-slate-800/50"
+                  >
+                    <span class="text-slate-400">عرض دستگاه‌ها:</span>
+                    <span class="font-semibold text-amber-300"
+                      >پلاترهای ۱ متری تا ۳.۲ متری</span
+                    >
+                  </div>
+                  <div class="flex items-center justify-between py-1.5">
+                    <span class="text-slate-400">تست نهایی:</span>
+                    <span class="font-semibold text-emerald-300"
+                      >کالیبراسیون و تست چاپ سنگین</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div class="min-w-full p-8 md:p-16 text-white">
-            <div class="max-w-2xl">
-              <span class="inline-block bg-red-400 text-gray-800 text-xs font-bold px-3 py-1 rounded-full mb-4"> تکنولوژی </span>
-              <h2 class="text-2xl md:text-4xl font-bold mb-4">آینده وب‌سایت‌ها با هوش مصنوعی</h2>
-              <p class="text-sm md:text-base text-blue-100 mb-6">هوش مصنوعی چطور داره صنعت طراحی وب رو متحول میکنه؟ این مقاله رو از دست ندید.</p>
-              <button class="bg-white text-red-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition">ادامه مطلب</button>
-            </div>
-          </div>
-        </div>
-
-        <button
-          id="prev-btn"
-          class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-sm transition"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button
-          id="next-btn"
-          class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-sm transition"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        <!-- نقطه‌های اسلایدر -->
-        <div class="flex absolute bottom-4 left-1/2 -translate-x-1/2 space-x-2">
-          <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="0"></button>
-          <button class="dot w-3 h-3 rounded-full bg-white/30 hover:bg-white transition" data-index="1"></button>
-          <button class="dot w-3 h-3 rounded-full bg-white/30 hover:bg-white transition" data-index="2"></button>
         </div>
       </div>
     </section>
 
-    <!-- ========== Main ========== -->
-    <div class="container mx-auto px-4 py-8">
-      <!-- ====== ردیف ۱: خیرین و نیک‌اندیشان شهر ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-red-500 pr-3 flex items-center gap-2">
-            <span class="text-red-500">🤝</span>
-            خیرین و نیک‌اندیشان شهر
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-red-600 border-2 border-red-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-red-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- کارت ۱ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./src/img/01.png" alt="خیر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">خیر برتر</div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800">علی محمدی</h4>
-              <p class="text-sm text-gray-500">خیر مدرسه‌ساز</p>
-              <p class="text-xs text-gray-400 mt-2 line-clamp-2">ساخت ۵ مدرسه در مناطق محروم شهر</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۲۵</span>
-                <a href="#" class="text-red-500 text-sm hover:underline">بیشتر بدانید</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۲ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./src/img/02.png" alt="خیر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">خیر برتر</div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800">سارا حسینی</h4>
-              <p class="text-sm text-gray-500">حامی سلامت</p>
-              <p class="text-xs text-gray-400 mt-2 line-clamp-2">احداث ۳ مرکز درمانی در شهر</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۲۰</span>
-                <a href="#" class="text-red-500 text-sm hover:underline">بیشتر بدانید</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۳ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./src/img/03.png" alt="خیر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800">رضا کریمی</h4>
-              <p class="text-sm text-gray-500">حامی فرهنگی</p>
-              <p class="text-xs text-gray-400 mt-2 line-clamp-2">تأسیس ۲ کتابخانه عمومی</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۱۵</span>
-                <a href="#" class="text-red-500 text-sm hover:underline">بیشتر بدانید</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۴ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-48 overflow-hidden">
-              <img src="./src/img/04.png" alt="خیر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800">محمدرضا احمدی</h4>
-              <p class="text-sm text-gray-500">خیر ورزشی</p>
-              <p class="text-xs text-gray-400 mt-2 line-clamp-2">احداث ۲ سالن ورزشی</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۱۰</span>
-                <a href="#" class="text-red-500 text-sm hover:underline">بیشتر بدانید</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <!-- About Me Section -->
+    <section
+      id="about"
+      class="py-24 relative z-10 border-t border-slate-800/60"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <!-- About Image / Visual -->
+          <div class="lg:col-span-5">
+            <div class="relative">
+              <div
+                class="glass-panel p-4 rounded-3xl border border-slate-700/50 relative z-10 overflow-hidden"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+                  alt="تعمیرات الکترونیک صنعتی"
+                  class="rounded-2xl w-full h-80 object-cover filter brightness-90 contrast-110"
+                />
 
-      <!-- ====== ردیف ۲: معرفی شهر (اسلایدر دستی) ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-blue-500 pr-3 flex items-center gap-2">
-            <span class="text-blue-500">🏙️</span>
-            معرفی شهر
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-blue-600 border-2 border-blue-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-blue-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="relative h-64 rounded-2xl overflow-hidden group">
-            <img src="./src/img/01.png" alt="شهر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-              <div>
-                <h4 class="text-white font-bold text-lg">میدان آزادی</h4>
-                <p class="text-gray-300 text-sm">نماد شهر</p>
+                <!-- Floating Badge -->
+                <div
+                  class="absolute bottom-8 right-8 glass-panel p-4 rounded-2xl border border-cyan-500/30 flex items-center gap-3"
+                >
+                  <div
+                    class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xl"
+                  >
+                    <i class="fa-solid fa-award"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs text-slate-400">تخصص ویژه</div>
+                    <div class="text-sm font-bold text-white">
+                      پلاتر و بردهای های-تک
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="relative h-64 rounded-2xl overflow-hidden group">
-            <img src="./src/img/02.png" alt="شهر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-              <div>
-                <h4 class="text-white font-bold text-lg">پارک ملت</h4>
-                <p class="text-gray-300 text-sm">فضای سبز شهری</p>
-              </div>
-            </div>
-          </div>
-          <div class="relative h-64 rounded-2xl overflow-hidden group">
-            <img src="./src/img/03.png" alt="شهر" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-              <div>
-                <h4 class="text-white font-bold text-lg">پل تاریخی</h4>
-                <p class="text-gray-300 text-sm">بافت تاریخی</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== ردیف ۳: فرهنگی و هنری (گالری آثار) ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-purple-500 pr-3 flex items-center gap-2">
-            <span class="text-purple-500">🎨</span>
-            فرهنگی و هنری
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-purple-600 border-2 border-purple-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-purple-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <!-- کارت ۱ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-56 overflow-hidden">
-              <img src="./src/img/01.png" alt="اثر هنری" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <span class="text-white text-xs bg-purple-500 px-2 py-1 rounded-full">نقاشی</span>
-              </div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800 text-sm">شب پرستاره</h4>
-              <p class="text-xs text-gray-500">اثر: علی رضایی</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۲۰</span>
-                <a href="#" class="text-purple-500 text-xs hover:underline">مشاهده اثر</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۲ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-56 overflow-hidden">
-              <img src="./src/img/02.png" alt="اثر هنری" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <span class="text-white text-xs bg-purple-500 px-2 py-1 rounded-full">خوشنویسی</span>
-              </div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800 text-sm">آیات نور</h4>
-              <p class="text-xs text-gray-500">اثر: سارا حسینی</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۱۸</span>
-                <a href="#" class="text-purple-500 text-xs hover:underline">مشاهده اثر</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۳ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-56 overflow-hidden">
-              <img src="./src/img/03.png" alt="اثر هنری" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <span class="text-white text-xs bg-purple-500 px-2 py-1 rounded-full">عکاسی</span>
-              </div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800 text-sm">غروب زیبا</h4>
-              <p class="text-xs text-gray-500">اثر: رضا کریمی</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۱۵</span>
-                <a href="#" class="text-purple-500 text-xs hover:underline">مشاهده اثر</a>
-              </div>
-            </div>
-          </div>
-          <!-- کارت ۴ -->
-          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-            <div class="relative h-56 overflow-hidden">
-              <img src="./src/img/04.png" alt="اثر هنری" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <span class="text-white text-xs bg-purple-500 px-2 py-1 rounded-full">سفال</span>
-              </div>
-            </div>
-            <div class="p-4">
-              <h4 class="font-bold text-gray-800 text-sm">ظروف سنتی</h4>
-              <p class="text-xs text-gray-500">اثر: محمدرضا احمدی</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۴۰۵/۰۳/۱۰</span>
-                <a href="#" class="text-purple-500 text-xs hover:underline">مشاهده اثر</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== ردیف ۴: ورزشی (طرح با بک‌گراند) ====== -->
-      <section class="mb-16">
-        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-lime-500 via-emerald-500 to-teal-600 p-8 md:p-12">
-          <!-- پس‌زمینه با طرح هندسی -->
-          <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/3"></div>
-            <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full translate-y-1/2 -translate-x-1/4"></div>
-            <div class="absolute top-1/2 left-1/2 w-48 h-48 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
           </div>
 
-          <!-- هدر با "مشاهده همه" در پس‌زمینه رنگی -->
-          <div class="relative flex items-center justify-between mb-8">
-            <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
-              <span>⚽</span>
-              ورزشی
-            </h3>
-            <a
-              href="#"
-              class="group inline-flex items-center gap-2 px-3 py-2 text-[10px] sm:px-4 sm:py-2 sm:text-sm text-white/80 hover:text-white transition-all duration-300 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30"
+          <!-- About Text -->
+          <div class="lg:col-span-7 text-right space-y-6">
+            <div
+              class="inline-flex items-center gap-2 text-cyan-400 text-sm font-bold tracking-wide"
             >
-              <span>مشاهده همه</span>
-              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
+              <i class="fa-solid fa-user-gear"></i>
+              <span>درباره همایون</span>
+            </div>
+
+            <h2
+              class="text-3xl sm:text-4xl font-extrabold text-white leading-snug"
+            >
+              تخصص در دقیق‌ترین قطعات الکترونیک و مکانیک پرینترهای صنعتی
+            </h2>
+
+            <p class="text-slate-300 leading-relaxed text-base font-light">
+              من همایون هستم، متخصص و مجری تعمیرات تخصصی سیستم‌های الکترونیکی و
+              چاپ صنعتی wide-format. طی سال‌ها فعالیت تخصصی، تمرکز من بر روی
+              عیب‌یابی دقیق سخت‌افزاری بردهای الکترونیکی (Main Board, Servo
+              Board, Power Supply) و اورهال مکانیزم پرینترها و پلاترهای بزرگ
+              صنعتی (دستگاه‌های ۱ متری و عریض‌تر) بوده است.
+            </p>
+
+            <p class="text-slate-400 leading-relaxed text-sm">
+              هدف اصلی من، کاهش هزینه‌های توقف خط تولید یا چاپخانه‌هاست؛ به‌جای
+              تعویض کامل بردهای گران‌قیمت نایاب، با عیب‌یابی قطعه‌ای و
+              میکروسکوپی، برد را دقیقاً به حالت اولیه کارخانه بازمی‌گردانم.
+            </p>
+
+            <!-- Skill Bars / Tags -->
+            <div class="pt-4 space-y-4">
+              <h3 class="text-sm font-bold text-slate-200">
+                مهارت‌ها و حوزه‌های تسلط:
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-cyan-500/30 text-cyan-300"
+                >
+                  <i class="fa-solid fa-microchip ml-1.5"></i>تعویض چیپ BGA /
+                  SMD
+                </span>
+                <span
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-amber-500/30 text-amber-300"
+                >
+                  <i class="fa-solid fa-sliders ml-1.5"></i>تنظیم و کالیبراسیون
+                  انکودر و سروو
+                </span>
+                <span
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-blue-500/30 text-blue-300"
+                >
+                  <i class="fa-solid fa-bolt ml-1.5"></i>تعمیر بردهای تغذیه پاور
+                  High-Voltage
+                </span>
+                <span
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-medium glass-panel border border-emerald-500/30 text-emerald-300"
+                >
+                  <i class="fa-solid fa-print ml-1.5"></i>سرویس سیستم مرکب‌رسانی
+                  و هد پلاتر
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section
+      id="services"
+      class="py-24 relative z-10 bg-slate-950/50 border-t border-slate-800/60"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+          <span class="text-cyan-400 text-sm font-bold tracking-wide">
+            <i class="fa-solid fa-gears ml-1"></i> خدمات تخصصی
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-white">
+            خدماتی که برای صنایع و چاپخانه‌ها ارائه می‌دهم
+          </h2>
+          <p class="text-slate-400 text-sm sm:text-base">
+            خدمات جامع و بدون واسطه از عیب‌یابی بردهای هوشمند تا تنظیمات دقیق
+            مکانیکی پلاترها
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Service Card 1 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-cyan-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors"
+            >
+              تعمیر تخصصی بردهای الکترونیکی
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              عیب‌یابی و تعمیر انواع برد اصلی (Mainboard)، برد پاور (Power
+              Supply) و بردهای کنترلر دستگاه‌های صنعتی و پلاتر.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-cyan-400"></i> تعویض قطعات
+                سوخته SMD & BGA
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-cyan-400"></i> برطرف کردن
+                نوسانات ولتاژ ورودی
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service Card 2 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-amber-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-print"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-amber-400 transition-colors"
+            >
+              سرویس و اورهال پلاترهای ۱ متری
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              سرویس کامل و بازسازی پرینترها و پلاترهای بزرگ صنعتی (Mimaki,
+              Roland, Mutoh, Epson) از عرض ۱ متر تا ۳.۲ متر.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-amber-400"></i> تنظیم دقیق
+                ارتفاع و گپ هد
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-amber-400"></i> شستشو و احیای
+                نزل‌های گرفته
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service Card 3 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-blue-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors"
+            >
+              تنظیم سروو موتور و انکودر
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              رفع خطاهای حرکتی محورهای X و Y، عیب‌یابی سنسورهای نوری و انکودرهای
+              نواری و دیسکی دستگاه‌های صنعتی.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-blue-400"></i> رفع خطاهای پله
+                زدن و عدم تطابق چاپ
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-blue-400"></i> تعویض و تنظیم
+                تسمه‌ها و پولی‌ها
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service Card 4 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-vial-circle-check"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors"
+            >
+              برنامه‌ریزی و کالبیراسیون نرم‌افزاری
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              پروگرام کردن آی‌سی‌های ایپرام (EEPROM) و فیرم‌ور (Firmware)، تنظیم
+              پروفایل‌های رنگی و هماهنگ‌سازی RIP.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-emerald-400"></i> آپدیت و
+                ریکاور فیرم‌ورهای آسیب‌دیده
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-emerald-400"></i> تنظیم
+                پارامترهای چاپ بی-دایرکشنال
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service Card 5 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-purple-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-wave-square"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors"
+            >
+              تست سیگنالی با اسیلوسکوپ
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              شناسایی قطعی‌ها و نویزهای فرکانسی پنهان در مسیر خطوط داده هد و
+              بردهای پردازش تصویر با تجهیزات پیشرفته.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-purple-400"></i> عیب‌یابی
+                کابل‌های فلت دیتا
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-purple-400"></i> تحلیل شکل موج
+                ولتاژ تزریق هد
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service Card 6 -->
+          <div
+            class="glass-panel p-8 rounded-3xl border border-slate-800 hover:border-rose-500/50 transition-all group hover:-translate-y-2 duration-300 relative"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl mb-6 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3
+              class="text-xl font-bold text-white mb-3 group-hover:text-rose-400 transition-colors"
+            >
+              اعزام کارشناس به محل پروژه
+            </h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              بررسی و عیب‌یابی حضوری برای دستگاه‌های صنعتی سنگین که امکان
+              جابه‌جایی آن‌ها به کارگاه وجود ندارد.
+            </p>
+            <ul
+              class="space-y-2 text-xs text-slate-300 border-t border-slate-800/80 pt-4"
+            >
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-rose-400"></i> پاسخگویی و اعزام
+                سریع
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-check text-rose-400"></i> تست کامل در خط
+                تولید شما
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio / Projects Section -->
+    <section
+      id="portfolio"
+      class="py-24 relative z-10 border-t border-slate-800/60"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+        >
+          <div>
+            <span class="text-cyan-400 text-sm font-bold tracking-wide">
+              <i class="fa-solid fa-screwdrivers-all ml-1"></i> سوابق اجرایی
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">
+              پروژه‌ها و نمونه‌کارهای احیا شده
+            </h2>
+          </div>
+          <div class="text-slate-400 text-sm max-w-md">
+            نمونه‌هایی از تعمیرات موفق بردهای گران‌قیمت صنعتی و پلاترهای بزرگ که
+            مجدداً به چرخه تولید بازگشته‌اند.
+          </div>
+        </div>
+
+        <!-- Portfolio Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Project 1 -->
+          <div
+            class="glass-panel rounded-3xl overflow-hidden border border-slate-800 hover:border-cyan-500/40 transition-all group"
+          >
+            <div class="relative h-56 overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+                alt="تعمیر برد پلاتر میماکی"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"
+              ></div>
+              <span
+                class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500 text-slate-950"
+              >
+                پلاتر صنعتی
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3
+                class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors"
+              >
+                احیای برد اصلی پلاتر ۱.۶ متری Mimaki
+              </h3>
+              <p class="text-slate-400 text-xs leading-relaxed">
+                رفع اتصال کوتاه شدید در بخش درایور هد، تعویض ترانزیستورهای قدرت
+                SMD و پروگرام مجدد EEPROM.
+              </p>
+              <div
+                class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400"
+              >
+                <span>زمان انجام: ۲ روز کاری</span>
+                <span class="text-emerald-400 font-semibold"
+                  ><i class="fa-solid fa-circle-check ml-1"></i>تحویل
+                  نهایی</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div
+            class="glass-panel rounded-3xl overflow-hidden border border-slate-800 hover:border-amber-500/40 transition-all group"
+          >
+            <div class="relative h-56 overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80"
+                alt="اورهال پرینتر رولند"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"
+              ></div>
+              <span
+                class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-slate-950"
+              >
+                اورهال کامل
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3
+                class="text-lg font-bold text-white group-hover:text-amber-400 transition-colors"
+              >
+                تعمیر و تنظیم کامل پرینتر Roland VersaCAMM
+              </h3>
+              <p class="text-slate-400 text-xs leading-relaxed">
+                تعویض موتور محور Carriage، کالیبراسیون انکودر خطی و برطرف‌سازی
+                کامل خطای جابه‌جایی چاپی.
+              </p>
+              <div
+                class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400"
+              >
+                <span>محل پروژه: چاپخانه صنعتی</span>
+                <span class="text-emerald-400 font-semibold"
+                  ><i class="fa-solid fa-circle-check ml-1"></i>تست عالی</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div
+            class="glass-panel rounded-3xl overflow-hidden border border-slate-800 hover:border-blue-500/40 transition-all group"
+          >
+            <div class="relative h-56 overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1608564697071-ddf911d81370?auto=format&fit=crop&w=800&q=80"
+                alt="تعمیر برد پاور صنعتی"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"
+              ></div>
+              <span
+                class="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold bg-blue-500 text-white"
+              >
+                برد تغذیه
+              </span>
+            </div>
+            <div class="p-6 space-y-3">
+              <h3
+                class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors"
+              >
+                تعمیر برد تغذیه پاور ۴۸ ولت High Power
+              </h3>
+              <p class="text-slate-400 text-xs leading-relaxed">
+                بازسازی کامل مسیرهای سوخته مدار چاپی (PCB)، تعویض خازن‌های
+                های-ولتاژ و چوک‌های ورودی.
+              </p>
+              <div
+                class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400"
+              >
+                <span>وضعیت: تستزنی زیر بار ۵ ساعت</span>
+                <span class="text-emerald-400 font-semibold"
+                  ><i class="fa-solid fa-circle-check ml-1"></i>کاملاً
+                  عملیاتی</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Me Section -->
+    <section
+      id="why-me"
+      class="py-24 relative z-10 bg-slate-950/40 border-t border-slate-800/60"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 space-y-6 text-right">
+            <span class="text-amber-400 text-sm font-bold tracking-wide">
+              <i class="fa-solid fa-shield-halved ml-1"></i> تضمین کیفیت و سرعت
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-white leading-snug">
+              چرا خدمات تعمیراتی همایون را انتخاب کنید؟
+            </h2>
+            <p
+              class="text-slate-400 text-sm sm:text-base leading-relaxed font-light"
+            >
+              خرابی دستگاه‌های صنعتی یعنی ضرر مالی ساعتی در خط چاپ یا تولید.
+              اولویت کاری من ارائه سریع‌ترین عیب‌یابی دقیق و تضمین سلامت قطعات
+              تعویضی است.
+            </p>
+
+            <div class="space-y-4 pt-2">
+              <div
+                class="flex items-start gap-4 glass-panel p-4 rounded-2xl border border-slate-800"
+              >
+                <div
+                  class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 text-lg"
+                >
+                  <i class="fa-solid fa-stopwatch"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    عیب‌یابی سریع و دقیق
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-1">
+                    شناسایی منشأ اصلی مشکل در کوتاه‌ترین زمان ممکن برای جلوگیری
+                    از اتلاف وقت.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="flex items-start gap-4 glass-panel p-4 rounded-2xl border border-slate-800"
+              >
+                <div
+                  class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 text-lg"
+                >
+                  <i class="fa-solid fa-file-contract"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    مهلت تست و ضمانت کتبی
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-1">
+                    ارائه ضمانت‌نامه کارکرد قطعات تعمیر شده و تست چند مرحله‌ای
+                    زیر بار.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="flex items-start gap-4 glass-panel p-4 rounded-2xl border border-slate-800"
+              >
+                <div
+                  class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 text-lg"
+                >
+                  <i class="fa-solid fa-box-check"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-white text-sm">
+                    استفاده از قطعات اورجینال
+                  </h4>
+                  <p class="text-xs text-slate-400 mt-1">
+                    استفاده اختصاصی از قطعات الکترونیکی با درجه کیفی بالا و اصلی
+                    کارخانه.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Graphic Counter Banner -->
+          <div class="lg:col-span-6">
+            <div
+              class="glass-panel p-8 rounded-3xl border border-slate-700/60 relative overflow-hidden text-center space-y-8"
+            >
+              <div
+                class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-2xl"
+              ></div>
+
+              <h3 class="text-xl font-bold text-white">
+                پشتیبانی و مشاوره مستقیم
+              </h3>
+
+              <p class="text-sm text-slate-300 leading-relaxed">
+                قبل از ارسال برد یا جابه‌جایی دستگاه سنگین، می‌توانید با تماس
+                تلفنی یا ارسال تصویر و ویدئو از کدهای خطا، مشاوره رایگان دریافت
+                کنید.
+              </p>
+
+              <div
+                class="inline-block p-6 rounded-2xl bg-slate-950/80 border border-slate-800 w-full"
+              >
+                <span class="text-xs text-slate-400 block mb-2"
+                  >تلفن مستقیم پاسخگویی فنی:</span
+                >
+                <a
+                  href="tel:09120000000"
+                  class="text-2xl sm:text-3xl font-black text-cyan-400 hover:text-cyan-300 dir-ltr inline-block tracking-wider"
+                >
+                  ۰۹۱۲ ۰۰۰ ۰۰۰۰
+                </a>
+              </div>
+
+              <div
+                class="flex items-center justify-center gap-6 text-xs text-slate-400"
+              >
+                <span class="flex items-center gap-2"
+                  ><i class="fa-solid fa-clock text-cyan-400"></i> ۸ صبح تا ۹
+                  شب</span
+                >
+                <span class="flex items-center gap-2"
+                  ><i class="fa-solid fa-location-dot text-amber-400"></i>
+                  پشتیبانی سراسری</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section
+      id="contact"
+      class="py-24 relative z-10 border-t border-slate-800/60"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <span class="text-cyan-400 text-sm font-bold tracking-wide">
+            <i class="fa-solid fa-headset ml-1"></i> تماس با همایون
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-white">
+            درخواست تعمیر یا ثبت مشاوره
+          </h2>
+          <p class="text-slate-400 text-sm">
+            اطلاعات دستگاه و مشکل آن را ارسال کنید تا در سریع‌ترین زمان با شما
+            تماس بگیرم.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <!-- Contact Info Boxes -->
+          <div class="lg:col-span-5 space-y-4">
+            <div
+              class="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center gap-4"
+            >
+              <div
+                class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl shrink-0"
+              >
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <span class="text-xs text-slate-400 block"
+                  >تماس تلفنی مستقیم</span
+                >
+                <a
+                  href="tel:09120000000"
+                  class="text-lg font-bold text-white hover:text-cyan-400 dir-ltr inline-block"
+                  >0912 000 0000</a
+                >
+              </div>
+            </div>
+
+            <div
+              class="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center gap-4"
+            >
+              <div
+                class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl shrink-0"
+              >
+                <i class="fa-brands fa-telegram"></i>
+              </div>
+              <div>
+                <span class="text-xs text-slate-400 block"
+                  >ارسال عکس برد / خطا در تلگرام</span
+                >
+                <a
+                  href="#"
+                  class="text-sm font-bold text-white hover:text-blue-400"
+                  >@Homayoun_Repair</a
+                >
+              </div>
+            </div>
+
+            <div
+              class="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center gap-4"
+            >
+              <div
+                class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0"
+              >
+                <i class="fa-brands fa-whatsapp"></i>
+              </div>
+              <div>
+                <span class="text-xs text-slate-400 block"
+                  >ارتباط سریع واتساپ</span
+                >
+                <a
+                  href="#"
+                  class="text-sm font-bold text-white hover:text-emerald-400"
+                  >گفتگو در واتساپ</a
+                >
+              </div>
+            </div>
+
+            <div
+              class="glass-panel p-6 rounded-2xl border border-slate-800 flex items-center gap-4"
+            >
+              <div
+                class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0"
+              >
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <span class="text-xs text-slate-400 block"
+                  >آدرس دفتر / کارگاه فنی</span
+                >
+                <span class="text-sm font-bold text-white"
+                  >تهران، مرکز تجهیزات و چاپ صنعتی (امکان دریافت بردی از سراسر
+                  کشور)</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="lg:col-span-7">
+            <form
+              onsubmit="handleFormSubmit(event)"
+              class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6"
+            >
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2"
+                    >نام و نام خانوادگی</label
+                  >
+                  <input
+                    type="text"
+                    required
+                    placeholder="مثال: علی محمدی"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2"
+                    >شماره تماس</label
+                  >
+                  <input
+                    type="tel"
+                    required
+                    placeholder="09123456789"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors text-sm dir-ltr text-right"
+                  />
+                </div>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2"
+                    >نوع دستگاه / قطعه</label
+                  >
+                  <select
+                    class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                  >
+                    <option>برد الکترونیکی صنعتی (Main/Power)</option>
+                    <option>پلاتر یا پرینتر صنعتی ۱ متری و بزرگتر</option>
+                    <option>سروو درایور و موتور صنعتی</option>
+                    <option>سایر موارد فنی</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2"
+                    >مدل یا برند دستگاه</label
+                  >
+                  <input
+                    type="text"
+                    placeholder="مثال: Mimaki / Roland / Mutoh"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-2"
+                  >شرح مختصر مشکل یا کد خطا</label
+                >
+                <textarea
+                  rows="4"
+                  placeholder="توضیح دهید دستگاه چه خطایی می‌دهد یا برد چه علائمی دارد..."
+                  class="w-full px-4 py-3 rounded-xl bg-slate-950/70 border border-slate-800 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors text-sm"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full py-4 rounded-xl font-bold text-slate-900 bg-gradient-to-r from-cyan-400 via-blue-400 to-amber-400 hover:opacity-95 transition-all shadow-lg shadow-cyan-500/25"
+              >
+                ارسال درخواست مشاوره
+                <i class="fa-solid fa-paper-plane mr-2"></i>
+              </button>
+
+              <div
+                id="form-msg"
+                class="hidden text-center text-xs font-semibold text-emerald-400 py-2"
+              ></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="border-t border-slate-800/80 bg-slate-950 py-12 relative z-10"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-6"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-lg"
+            >
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <div>
+              <span class="text-base font-black text-white block">همایون</span>
+              <span class="text-xs text-slate-500 block"
+                >خدمات تخصصی برد و پلاترهای بزرگ صنعتی</span
+              >
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-500 text-center">
+            تمامی حقوق محفوظ است © ۱۴۰۳ | طراحی رزومه و پورتفولیو اختصاصی همایون
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a
+              href="#hero"
+              class="w-10 h-10 rounded-xl glass-panel border border-slate-800 text-slate-400 hover:text-cyan-400 flex items-center justify-center transition-colors"
+              title="بازگشت به بالا"
+            >
+              <i class="fa-solid fa-arrow-up"></i>
             </a>
           </div>
-
-          <!-- کارت‌های ۳ تایی روی بک‌گراند -->
-          <div class="relative grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- کارت ۱ -->
-            <div
-              class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-white group"
-            >
-              <div class="flex items-center gap-4 mb-4">
-                <div
-                  class="w-14 h-14 rounded-full bg-lime-100 flex items-center justify-center text-2xl group-hover:bg-lime-500 group-hover:text-white transition-colors duration-300"
-                >
-                  ⚽
-                </div>
-                <div>
-                  <span class="text-xs text-lime-500 font-bold bg-lime-50 px-2 py-0.5 rounded-full">ویژه</span>
-                </div>
-              </div>
-              <h4 class="font-bold text-gray-800 text-lg group-hover:text-lime-600 transition-colors">قهرمانی تیم فوتبال</h4>
-              <p class="text-gray-500 text-sm mt-2 line-clamp-2">تیم فوتبال شهر با پیروزی قاطع برابر تیم تهران به مقام قهرمانی رسید.</p>
-              <div class="mt-4 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۲۵ خرداد ۱۴۰۵</span>
-                <a href="#" class="text-lime-500 text-sm font-medium hover:underline">بیشتر بخوانید</a>
-              </div>
-            </div>
-
-            <!-- کارت ۲ -->
-            <div
-              class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-white group"
-            >
-              <div class="flex items-center gap-4 mb-4">
-                <div
-                  class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-2xl group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300"
-                >
-                  🏀
-                </div>
-                <div>
-                  <span class="text-xs text-blue-500 font-bold bg-blue-50 px-2 py-0.5 rounded-full">لیگ</span>
-                </div>
-              </div>
-              <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition-colors">لیگ بسکتبال آغاز شد</h4>
-              <p class="text-gray-500 text-sm mt-2 line-clamp-2">دهمین دوره لیگ بسکتبال شهر با حضور ۱۲ تیم در سالن ورزشی آزادی آغاز شد.</p>
-              <div class="mt-4 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۲۰ خرداد ۱۴۰۵</span>
-                <a href="#" class="text-blue-500 text-sm font-medium hover:underline">بیشتر بخوانید</a>
-              </div>
-            </div>
-
-            <!-- کارت ۳ -->
-            <div
-              class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-white group"
-            >
-              <div class="flex items-center gap-4 mb-4">
-                <div
-                  class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-2xl group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300"
-                >
-                  🏊
-                </div>
-                <div>
-                  <span class="text-xs text-purple-500 font-bold bg-purple-50 px-2 py-0.5 rounded-full">مسابقات</span>
-                </div>
-              </div>
-              <h4 class="font-bold text-gray-800 text-lg group-hover:text-purple-600 transition-colors">مسابقات شنای شهر</h4>
-              <p class="text-gray-500 text-sm mt-2 line-clamp-2">مسابقات شنای شهر با حضور ۵۰ شناگر در رشته‌های مختلف برگزار شد.</p>
-              <div class="mt-4 flex items-center justify-between">
-                <span class="text-xs text-gray-400">۱۸ خرداد ۱۴۰۵</span>
-                <a href="#" class="text-purple-500 text-sm font-medium hover:underline">بیشتر بخوانید</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== ردیف ۴: گالری شهر (کارت‌های سه‌بعدی) ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-orange-500 pr-3 flex items-center gap-2">
-            <span class="text-orange-500">📸</span>
-            گالری شهر
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-orange-600 border-2 border-orange-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-orange-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div class="group perspective-1000">
-            <div class="relative preserve-3d duration-700 group-hover:rotate-y-180 w-full h-64">
-              <!-- جلو کارت -->
-              <div class="absolute backface-hidden w-full h-full rounded-2xl overflow-hidden">
-                <img src="./src/img/01.png" alt="گالری" class="w-full h-full object-cover" />
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <h4 class="text-white font-bold text-sm">میدان آزادی</h4>
-                </div>
-              </div>
-              <!-- پشت کارت -->
-              <div
-                class="absolute backface-hidden rotate-y-180 w-full h-full bg-orange-500 rounded-2xl flex flex-col items-center justify-center p-6 text-white"
-              >
-                <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h4 class="font-bold text-lg">میدان آزادی</h4>
-                <p class="text-sm text-orange-100 text-center mt-2">نماد اصلی شهر</p>
-                <a href="#" class="mt-4 px-4 py-2 bg-white text-orange-500 rounded-full text-sm font-bold hover:bg-orange-100 transition">مشاهده</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="group perspective-1000">
-            <div class="relative preserve-3d duration-700 group-hover:rotate-y-180 w-full h-64">
-              <div class="absolute backface-hidden w-full h-full rounded-2xl overflow-hidden">
-                <img src="./src/img/02.png" alt="گالری" class="w-full h-full object-cover" />
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <h4 class="text-white font-bold text-sm">پارک ملت</h4>
-                </div>
-              </div>
-              <div
-                class="absolute backface-hidden rotate-y-180 w-full h-full bg-blue-500 rounded-2xl flex flex-col items-center justify-center p-6 text-white"
-              >
-                <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h4 class="font-bold text-lg">پارک ملت</h4>
-                <p class="text-sm text-blue-100 text-center mt-2">فضای سبز شهری</p>
-                <a href="#" class="mt-4 px-4 py-2 bg-white text-blue-500 rounded-full text-sm font-bold hover:bg-blue-100 transition">مشاهده</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="group perspective-1000">
-            <div class="relative preserve-3d duration-700 group-hover:rotate-y-180 w-full h-64">
-              <div class="absolute backface-hidden w-full h-full rounded-2xl overflow-hidden">
-                <img src="./src/img/03.png" alt="گالری" class="w-full h-full object-cover" />
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <h4 class="text-white font-bold text-sm">پل تاریخی</h4>
-                </div>
-              </div>
-              <div
-                class="absolute backface-hidden rotate-y-180 w-full h-full bg-purple-500 rounded-2xl flex flex-col items-center justify-center p-6 text-white"
-              >
-                <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h4 class="font-bold text-lg">پل تاریخی</h4>
-                <p class="text-sm text-purple-100 text-center mt-2">بافت تاریخی</p>
-                <a href="#" class="mt-4 px-4 py-2 bg-white text-purple-500 rounded-full text-sm font-bold hover:bg-purple-100 transition">مشاهده</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="group perspective-1000">
-            <div class="relative preserve-3d duration-700 group-hover:rotate-y-180 w-full h-64">
-              <div class="absolute backface-hidden w-full h-full rounded-2xl overflow-hidden">
-                <img src="./src/img/04.png" alt="گالری" class="w-full h-full object-cover" />
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <h4 class="text-white font-bold text-sm">مسجد جامع</h4>
-                </div>
-              </div>
-              <div
-                class="absolute backface-hidden rotate-y-180 w-full h-full bg-green-500 rounded-2xl flex flex-col items-center justify-center p-6 text-white"
-              >
-                <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h4 class="font-bold text-lg">مسجد جامع</h4>
-                <p class="text-sm text-green-100 text-center mt-2">معماری اسلامی</p>
-                <a href="#" class="mt-4 px-4 py-2 bg-white text-green-500 rounded-full text-sm font-bold hover:bg-green-100 transition">مشاهده</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== ردیف ۵: مفاخر و افتخارآفرینان شهر ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-yellow-500 pr-3 flex items-center gap-2">
-            <span class="text-yellow-500">⭐</span>
-            مفاخر و افتخارآفرینان شهر
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-yellow-600 border-2 border-yellow-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-yellow-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-            <div class="w-28 h-28 rounded-full mx-auto overflow-hidden border-4 border-yellow-400">
-              <img src="./src/img/01.png" alt="مفاخر" class="w-full h-full object-cover" />
-            </div>
-            <h4 class="font-bold text-gray-800 mt-4">دکتر علی محمدی</h4>
-            <p class="text-sm text-gray-500">پزشک برجسته</p>
-            <p class="text-xs text-gray-400 mt-2">خدمت ۳۰ ساله در مناطق محروم</p>
-            <div class="mt-3 flex items-center justify-center gap-2">
-              <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-1 rounded-full">افتخارآفرین</span>
-            </div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-            <div class="w-28 h-28 rounded-full mx-auto overflow-hidden border-4 border-yellow-400">
-              <img src="./src/img/02.png" alt="مفاخر" class="w-full h-full object-cover" />
-            </div>
-            <h4 class="font-bold text-gray-800 mt-4">استاد رضا کریمی</h4>
-            <p class="text-sm text-gray-500">هنرمند خوشنویس</p>
-            <p class="text-xs text-gray-400 mt-2">برگزیده جشنواره خوشنویسی</p>
-            <div class="mt-3 flex items-center justify-center gap-2">
-              <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-1 rounded-full">مفاخر</span>
-            </div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-            <div class="w-28 h-28 rounded-full mx-auto overflow-hidden border-4 border-yellow-400">
-              <img src="./src/img/03.png" alt="مفاخر" class="w-full h-full object-cover" />
-            </div>
-            <h4 class="font-bold text-gray-800 mt-4">سارا حسینی</h4>
-            <p class="text-sm text-gray-500">ورزشکار ملی</p>
-            <p class="text-xs text-gray-400 mt-2">مدال‌آور مسابقات کشوری</p>
-            <div class="mt-3 flex items-center justify-center gap-2">
-              <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-1 rounded-full">قهرمان</span>
-            </div>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-            <div class="w-28 h-28 rounded-full mx-auto overflow-hidden border-4 border-yellow-400">
-              <img src="./src/img/03.png" alt="مفاخر" class="w-full h-full object-cover" />
-            </div>
-            <h4 class="font-bold text-gray-800 mt-4">سارا حسینی</h4>
-            <p class="text-sm text-gray-500">ورزشکار ملی</p>
-            <p class="text-xs text-gray-400 mt-2">مدال‌آور مسابقات کشوری</p>
-            <div class="mt-3 flex items-center justify-center gap-2">
-              <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-1 rounded-full">قهرمان</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====== ردیف ۶: کسب و کارهای شهر ====== -->
-      <section class="mb-16">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-md sm:text-2xl font-bold text-gray-800 border-r-4 border-emerald-500 pr-3 flex items-center gap-2">
-            <span class="text-emerald-500">💼</span>
-            کسب و کارهای شهر
-          </h3>
-          <a
-            href="#"
-            class="relative inline-flex items-center gap-2 px-3 py-1 text-[10px] sm:px-5 sm:py-2 sm:text-sm font-medium text-emerald-600 border-2 border-emerald-600 rounded-full hover:text-white transition-all duration-300 overflow-hidden group"
-          >
-            <span class="relative z-10">مشاهده همه</span>
-            <svg class="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span class="absolute inset-0 bg-emerald-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-          </a>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div class="w-20 h-20 rounded-full mx-auto bg-blue-100 flex items-center justify-center text-4xl">🏪</div>
-            <h4 class="font-bold text-gray-800 mt-3 text-sm">فروشگاه رضا</h4>
-            <p class="text-xs text-gray-500">لوازم الکترونیکی</p>
-            <a href="#" class="text-emerald-500 text-xs mt-2 inline-block hover:underline">مشاهده</a>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div class="w-20 h-20 rounded-full mx-auto bg-red-100 flex items-center justify-center text-4xl">🍽️</div>
-            <h4 class="font-bold text-gray-800 mt-3 text-sm">رستوران سارا</h4>
-            <p class="text-xs text-gray-500">غذای سنتی</p>
-            <a href="#" class="text-emerald-500 text-xs mt-2 inline-block hover:underline">مشاهده</a>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div class="w-20 h-20 rounded-full mx-auto bg-purple-100 flex items-center justify-center text-4xl">💻</div>
-            <h4 class="font-bold text-gray-800 mt-3 text-sm">آموزشگاه دانش</h4>
-            <p class="text-xs text-gray-500">آموزش مهارت‌های دیجیتال</p>
-            <a href="#" class="text-emerald-500 text-xs mt-2 inline-block hover:underline">مشاهده</a>
-          </div>
-          <div class="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
-            <div class="w-20 h-20 rounded-full mx-auto bg-yellow-100 flex items-center justify-center text-4xl">🏥</div>
-            <h4 class="font-bold text-gray-800 mt-3 text-sm">کلینیک سلامت</h4>
-            <p class="text-xs text-gray-500">خدمات پزشکی</p>
-            <a href="#" class="text-emerald-500 text-xs mt-2 inline-block hover:underline">مشاهده</a>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- ========== Footer ========== -->
-    <footer class="bg-gray-900 text-white mt-12">
-      <div class="container mx-auto px-4 py-12">
-        <!-- حذف justify-items-center و اضافه کردن items-start -->
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.6fr_0.6fr_0.5fr] xl:grid-cols-[1fr_0.3fr_0.3fr_0.5fr] xl:gap-x-12 gap-8 sm:gap-x-32 lg:gap-x-9 justify-items-center mx-auto"
-        >
-          <!-- درباره (در موبایل وسط، در دسکتاپ راست) -->
-          <div class="text-center sm:text-right w-full">
-            <h5 class="text-lg font-bold mb-4">درباره سایت</h5>
-            <p class="text-gray-400 text-sm leading-relaxed text-justify">
-              لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و
-              سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز
-            </p>
-          </div>
-
-          <!-- لینک‌های سریع -->
-          <div class="text-center sm:text-right w-full">
-            <h5 class="text-lg font-bold mb-4">لینک‌های سریع</h5>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="text-gray-400 hover:text-white transition">خانه</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">مقالات</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">درباره ما</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">تماس با ما</a></li>
-            </ul>
-          </div>
-
-          <!-- دسته‌بندی‌ها (این یکی دقیقاً به راست می‌چسبه) -->
-          <div class="text-center sm:text-right w-full">
-            <h5 class="text-lg font-bold mb-4">دسته‌بندی‌ها</h5>
-            <ul class="space-y-2 text-sm">
-              <li><a href="#" class="text-gray-400 hover:text-white transition">طراحی وب</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">وردپرس</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">سئو</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white transition">برنامه‌نویسی</a></li>
-            </ul>
-          </div>
-
-          <!-- شبکه‌های اجتماعی -->
-          <div class="text-center sm:text-right w-full">
-            <h5 class="text-lg font-bold mb-4">ما را دنبال کنید</h5>
-            <div class="flex gap-3 items-center justify-center sm:justify-start">
-              <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.104c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0021.173-6.092c1.634-3.871 1.752-8.236.566-12.12z"
-                  />
-                </svg>
-              </a>
-              <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.205 11.387.6.113.82-.26.82-.58 0-.287-.01-1.05-.015-2.06-3.338.725-4.042-1.61-4.042-1.61-.546-1.39-1.335-1.76-1.335-1.76-1.09-.746.082-.73.082-.73 1.205.085 1.838 1.237 1.838 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.3-.535-1.52.117-3.16 0 0 1.008-.322 3.3 1.23.96-.267 1.98-.4 3-.4s2.04.133 3 .4c2.29-1.552 3.297-1.23 3.297-1.23.653 1.64.24 2.86.118 3.16.768.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.476 5.92.43.37.824 1.102.824 2.22 0 1.602-.015 2.894-.015 3.287 0 .322.218.698.825.58C20.565 21.795 24 17.3 24 12c0-6.627-5.373-12-12-12z"
-                  />
-                </svg>
-              </a>
-              <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.182-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.244 3.768-5.487 0-2.866-2.063-4.869-5.008-4.869-3.414 0-5.42 2.557-5.42 5.198 0 1.03.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.165-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.618 0 11.985-5.367 11.985-11.987C23.999 5.367 18.635 0 12.017 0z"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>کپی‌رایت © ۱۴۰۵ - ساخته شده توسط عبدالکریم بازدار.</p>
         </div>
       </div>
     </footer>
-    <script src="./src/script.js"></script>
+
+    <!-- Interactive Scripts -->
+    <script>
+      // Mobile Navigation Toggle
+      const mobileBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIcon = document.getElementById("menu-icon");
+
+      mobileBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        if (mobileMenu.classList.contains("hidden")) {
+          menuIcon.classList.remove("fa-xmark");
+          menuIcon.classList.add("fa-bars");
+        } else {
+          menuIcon.classList.remove("fa-bars");
+          menuIcon.classList.add("fa-xmark");
+        }
+      });
+
+      // Form Submit Simulation
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        const msgBox = document.getElementById("form-msg");
+        msgBox.classList.remove("hidden");
+        msgBox.innerText =
+          "درخواست شما با موفقیت ثبت شد. به‌زودی با شما تماس خواهم گرفت.";
+        e.target.reset();
+        setTimeout(() => {
+          msgBox.classList.add("hidden");
+        }, 5000);
+      }
+
+      // Particle Canvas Background (Electronic Circuit Node Effect)
+      const canvas = document.getElementById("circuitCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let width, height;
+      let particles = [];
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 0.6;
+          this.vy = (Math.random() - 0.5) * 0.6;
+          this.radius = Math.random() * 1.5 + 1;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          if (this.x < 0 || this.x > width) this.vx *= -1;
+          if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.scale * Math.PI * 2);
+          ctx.fillStyle = "rgba(0, 242, 254, 0.4)";
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < 45; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateCanvas() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 130) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(0, 242, 254, ${0.15 * (1 - dist / 130)})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animateCanvas);
+      }
+
+      window.onload = function () {
+        animateCanvas();
+      };
+    </script>
   </body>
 </html>
