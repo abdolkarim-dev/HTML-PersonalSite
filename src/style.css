@@ -1,0 +1,70 @@
+  body {
+        font-family: "Vazirmatn", sans-serif;
+        background-color: #070a13;
+        color: #e2e8f0;
+        overflow-x: hidden;
+      }
+
+      /* Glassmorphism utility */
+      .glass-panel {
+        background: rgba(18, 25, 44, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-nav {
+        background: rgba(10, 15, 29, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      /* Gradient Borders */
+      .glow-border {
+        position: relative;
+      }
+      .glow-border::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        background: linear-gradient(45deg, #00f2fe, transparent, #ffb703);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+      }
+      .glow-border:hover::before {
+        opacity: 1;
+      }
+
+      /* Circuit Grid Background Effect */
+      .circuit-bg {
+        background-image:
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(0, 242, 254, 0.05) 0%,
+            transparent 60%
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size:
+          100% 100%,
+          40px 40px,
+          40px 40px;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #070a13;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00f2fe;
+      }
